@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { BadgeCheck, Gauge, Leaf, PlugZap } from "lucide-react";
 import heroImage from "@/assets/hero-charging.jpg";
 import { siteConfig } from "@/config/platform";
@@ -104,12 +104,12 @@ function Index() {
                 >
                   Calculate my footprint
                 </a>
-                <a
-                  href="/route-planner"
+                <Link
+                  to="/route-planner"
                   className="rounded-xl border border-primary-foreground/30 px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary-foreground/10"
                 >
                   Plan an EV route
-                </a>
+                </Link>
               </div>
             </div>
           </div>
