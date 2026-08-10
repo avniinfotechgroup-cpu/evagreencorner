@@ -1,16 +1,21 @@
-import { Leaf, MapPin, Menu } from "lucide-react";
+import { Bookmark, Leaf, MapPin, Menu } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { siteConfig } from "@/config/platform";
+import { useSaved } from "@/lib/savedItems";
 
 const NAV = [
   { label: "Charging", href: "/" },
   { label: "Route Planner", href: "/route-planner" },
   { label: "Locations", href: "/locations" },
+  { label: "Solar", href: "/solar-calculator" },
   { label: "Calculators", href: "/carbon-calculator" },
   { label: "Directory", href: "/directory" },
 ];
 
 export function SiteHeader() {
+  const saved = useSaved();
+  const savedCount = saved.stations.length + saved.routes.length;
+
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-5">
@@ -38,6 +43,18 @@ export function SiteHeader() {
             <MapPin className="size-3.5 text-leaf" />
             {siteConfig.defaultCity}
           </span>
+          <Link
+            to="/dashboard"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-border px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-surface"
+          >
+            <Bookmark className="size-4 text-leaf" />
+            <span className="hidden sm:inline">My saves</span>
+            {savedCount > 0 && (
+              <span className="rounded-md bg-secondary px-1.5 text-[11px] text-secondary-foreground">
+                {savedCount}
+              </span>
+            )}
+          </Link>
           <a
             href="/directory"
             className="hidden rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-soft transition-transform hover:-translate-y-0.5 md:inline-block"

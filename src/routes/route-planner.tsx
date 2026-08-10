@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { toast } from "sonner";
+import { Bookmark, BookmarkCheck } from "lucide-react";
+import { routeKey, saveRoute, useSaved } from "@/lib/savedItems";
 import {
   ArrowRight,
   BatteryCharging,
@@ -38,18 +41,36 @@ export const Route = createFileRoute("/route-planner")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  validateSearch: (search: Record<string, unknown>) => ({
+    from: typeof search['from'] === "string" ? (search['from'] as string) : undefined,
+    to: typeof search['to'] === "string" ? (search['to'] as string) : undefined,
+    vehicle: typeof search['vehicle'] === "string" ? (search['vehicle'] as string) : undefined,
+    soc: Number(search['soc']) > 0 ? Number(search['soc']) : undefined,
+  }),
   component: RoutePlannerPage,
 });
 
 function RoutePlannerPage() {
-  const [from, setFrom] = useState("Bengaluru");
-  const [to, setTo] = useState("Chennai");
-  const [vehicleId, setVehicleId] = useState(VEHICLES[0]!.id);
-  const [startSoc, setStartSoc] = useState(80);
+  const search = Route.useSearch();
+  const [from, setFrom] = useState(search.from ?? "Bengaluru");
+  const [to, setTo] = useState(search.to ?? "Chennai");
+  const [vehicleId, setVehicleId] = useState(
+    VEHICLES.find((v) => v.id === search.vehicle)?.id ?? VEHICLES[0]!.id,
+  );
+  const [startSoc, setStartSoc] = useState(search.soc ?? 80);
   const [plan, setPlan] = useState<RoutePlan | null>(null);
   const [busy, setBusy] = useState(false);
 
   const vehicle = VEHICLES.find((v) => v.id === vehicleId)!;
+  const saved = useSaved();
+  const isSaved = saved.routes.some(
+    (r) => r.id === routeKey({ from, to, vehicleId }),
+  );
+
+  const onSave = () => {
+    saveRoute({ from: from.trim(), to: to.trim(), vehicleId, startSoc });
+    toast.success(`Saved ${from} → ${to} to your dashboard`);
+  };
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -147,6 +168,28 @@ function RoutePlannerPage() {
                   {busy ? <Loader2 className="size-4 animate-spin" /> : <RouteIcon className="size-4" />}
                   Plan route
                 </button>
+              </div>
+
+              <div className="mt-3 flex flex-wrap items-center gap-2 px-1">
+                <button
+                  type="button"
+                  onClick={onSave}
+                  className={
+                    "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-colors " +
+                    (isSaved
+                      ? "border-leaf/40 bg-leaf/10 text-leaf"
+                      : "border-border text-muted-foreground hover:text-foreground")
+                  }
+                >
+                  {isSaved ? <BookmarkCheck className="size-3.5" /> : <Bookmark className="size-3.5" />}
+                  {isSaved ? "Search saved" : "Save this search"}
+                </button>
+                <Link
+                  to="/dashboard"
+                  className="rounded-full border border-border px-3 py-1.5 text-[11px] font-semibold text-muted-foreground hover:text-foreground"
+                >
+                  View saved trips
+                </Link>
               </div>
 
               <div className="mt-3 flex flex-wrap items-center gap-2 px-1">
