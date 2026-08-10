@@ -48,7 +48,7 @@ function Index() {
             height={1000}
             className="absolute inset-0 size-full object-cover"
           />
-          <div className="absolute inset-0 bg-canopy opacity-[0.92]" />
+          <div className="absolute inset-0 bg-canopy opacity-[0.88]" />
 
           <div className="relative mx-auto max-w-5xl px-5 pb-14 pt-20 text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-3.5 py-1.5 text-xs font-semibold text-primary-foreground backdrop-blur">
