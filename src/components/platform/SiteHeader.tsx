@@ -5,7 +5,7 @@ import { siteConfig } from "@/config/platform";
 const NAV = [
   { label: "Charging", href: "/" },
   { label: "Route Planner", href: "/route-planner" },
-  { label: "Air Quality", href: "/air-quality" },
+  { label: "Locations", href: "/locations" },
   { label: "Calculators", href: "/carbon-calculator" },
   { label: "Directory", href: "/directory" },
 ];

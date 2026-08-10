@@ -1,5 +1,7 @@
 import { ArrowUpRight, TrendingUp } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { POPULAR_AREAS } from "@/data/stations";
+import { slugify } from "@/data/aqi";
 
 function aqiTone(aqi: number) {
   if (aqi <= 60) return { label: "Good", cls: "bg-volt-gradient text-volt-foreground" };
@@ -22,22 +24,23 @@ export function PopularAreas() {
             density, live air quality and nearby green services.
           </p>
         </div>
-        <a
-          href="/locations"
+        <Link
+          to="/locations"
           className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-semibold hover:bg-surface"
         >
           Browse all locations
           <ArrowUpRight className="size-4" />
-        </a>
+        </Link>
       </div>
 
       <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {POPULAR_AREAS.map((area) => {
           const tone = aqiTone(area.aqi);
           return (
-            <a
+            <Link
               key={area.name}
-              href={`/locations/${area.name.toLowerCase().replace(/\s+/g, "-")}`}
+              to="/locations/$slug"
+              params={{ slug: slugify(area.name) }}
               className="group rounded-2xl border border-border bg-card p-5 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift"
             >
               <div className="flex items-start justify-between">
@@ -68,7 +71,7 @@ export function PopularAreas() {
                   </p>
                 </div>
               </div>
-            </a>
+            </Link>
           );
         })}
       </div>
