@@ -18,6 +18,9 @@ import { SiteHeader } from "@/components/platform/SiteHeader";
 import { SiteFooter } from "@/components/platform/SiteFooter";
 import { StationMap } from "@/components/platform/StationMap";
 import { AqiPanel } from "@/components/platform/AqiPanel";
+import { LiveConnectors } from "@/components/platform/LiveConnectors";
+import { SaveStationButton } from "@/components/platform/SaveStationButton";
+import type { LiveAvailability } from "@/lib/availability.functions";
 
 export const Route = createFileRoute("/stations/$stationId")({
   loader: ({ params }) => {
@@ -93,6 +96,26 @@ function StationDetail() {
   const air = getAirQuality(station.area);
   const busy = station.available === 0;
 
+  // Rendered instantly while the live reading loads (and if it fails).
+  const fallbackAvailability: LiveAvailability = {
+    stationId: station.id,
+    available: station.available,
+    total: station.total,
+    checkedAt: new Date().toISOString(),
+    connectors: station.connectors.map((type: string, i: number) => {
+      const bays = Math.max(1, Math.round(station.total / station.connectors.length));
+      const dc = type === "CCS2" || type === "CHAdeMO" || type === "GB/T";
+      return {
+        type,
+        bays,
+        free: Math.min(bays, i === 0 ? station.available : Math.max(0, station.available - 1)),
+        powerKw: dc ? station.maxPowerKw : Math.min(22, station.maxPowerKw),
+        kind: dc ? ("DC fast" as const) : ("AC" as const),
+        waitMinutes: 12,
+      };
+    }),
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
@@ -166,47 +189,11 @@ function StationDetail() {
                   <Phone className="size-4 text-leaf" />
                   Contact operator
                 </a>
+                <SaveStationButton stationId={station.id} name={station.name} />
               </div>
             </div>
 
-            {/* Connectors */}
-            <section className="mt-6 rounded-3xl border border-border bg-card p-6 shadow-soft">
-              <h2 className="font-display text-lg font-bold">Connectors & availability</h2>
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                {station.connectors.map((c: string, i: number) => {
-                  const bays = Math.max(1, Math.round(station.total / station.connectors.length));
-                  const free = Math.min(station.available, i === 0 ? station.available : Math.max(0, station.available - 1));
-                  const dc = c === "CCS2" || c === "CHAdeMO" || c === "GB/T";
-                  return (
-                    <div key={c} className="rounded-2xl border border-border bg-surface p-4">
-                      <div className="flex items-center justify-between">
-                        <p className="font-display text-sm font-bold">{c}</p>
-                        <span className="rounded-md bg-secondary px-2 py-0.5 text-[11px] font-semibold text-secondary-foreground">
-                          {dc ? "DC fast" : "AC"}
-                        </span>
-                      </div>
-                      <p className="mt-2 text-xs text-muted-foreground">
-                        {bays} bay{bays > 1 ? "s" : ""} · up to{" "}
-                        {dc ? station.maxPowerKw : Math.min(22, station.maxPowerKw)} kW
-                      </p>
-                      <div className="mt-3 flex items-center gap-1.5">
-                        {Array.from({ length: bays }).map((_, b) => (
-                          <span
-                            key={b}
-                            className={
-                              "h-2 flex-1 rounded-full " + (b < free ? "bg-leaf" : "bg-muted")
-                            }
-                          />
-                        ))}
-                      </div>
-                      <p className="mt-2 text-[11px] font-semibold text-muted-foreground">
-                        {free > 0 ? `${free} available now` : "Occupied — avg wait 12 min"}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
+            <LiveConnectors stationId={station.id} fallback={fallbackAvailability} />
 
             {/* Pricing */}
             <section className="mt-6 rounded-3xl border border-border bg-card p-6 shadow-soft">
