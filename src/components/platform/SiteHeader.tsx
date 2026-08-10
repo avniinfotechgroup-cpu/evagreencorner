@@ -39,6 +39,18 @@ export function SiteHeader() {
             <MapPin className="size-3.5 text-leaf" />
             {siteConfig.defaultCity}
           </span>
+          <Link
+            to="/dashboard"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-border px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-surface"
+          >
+            <Bookmark className="size-4 text-leaf" />
+            <span className="hidden sm:inline">My saves</span>
+            {savedCount > 0 && (
+              <span className="rounded-md bg-secondary px-1.5 text-[11px] text-secondary-foreground">
+                {savedCount}
+              </span>
+            )}
+          </Link>
           <a
             href="/directory"
             className="hidden rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-soft transition-transform hover:-translate-y-0.5 md:inline-block"
