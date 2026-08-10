@@ -6,6 +6,7 @@ const NAV = [
   { label: "Charging", href: "/" },
   { label: "Route Planner", href: "/route-planner" },
   { label: "Locations", href: "/locations" },
+  { label: "Solar", href: "/solar-calculator" },
   { label: "Calculators", href: "/carbon-calculator" },
   { label: "Directory", href: "/directory" },
 ];
