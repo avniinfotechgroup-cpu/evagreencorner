@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as RoutePlannerRouteImport } from './routes/route-planner'
 import { Route as SolarCalculatorRouteImport } from './routes/solar-calculator'
 import { Route as LocationsIndexRouteImport } from './routes/locations.index'
@@ -19,6 +20,11 @@ import { Route as StationsStationIdRouteImport } from './routes/stations.$statio
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RoutePlannerRoute = RoutePlannerRouteImport.update({
@@ -49,6 +55,7 @@ const StationsStationIdRoute = StationsStationIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/route-planner': typeof RoutePlannerRoute
   '/solar-calculator': typeof SolarCalculatorRoute
   '/locations/$slug': typeof LocationsSlugRoute
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/route-planner': typeof RoutePlannerRoute
   '/solar-calculator': typeof SolarCalculatorRoute
   '/locations/$slug': typeof LocationsSlugRoute
@@ -66,6 +74,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/route-planner': typeof RoutePlannerRoute
   '/solar-calculator': typeof SolarCalculatorRoute
   '/locations/$slug': typeof LocationsSlugRoute
@@ -76,6 +85,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/dashboard'
     | '/route-planner'
     | '/solar-calculator'
     | '/locations/$slug'
@@ -84,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/dashboard'
     | '/route-planner'
     | '/solar-calculator'
     | '/locations/$slug'
@@ -92,6 +103,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/dashboard'
     | '/route-planner'
     | '/solar-calculator'
     | '/locations/$slug'
@@ -101,6 +113,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRoute
   RoutePlannerRoute: typeof RoutePlannerRoute
   SolarCalculatorRoute: typeof SolarCalculatorRoute
   LocationsSlugRoute: typeof LocationsSlugRoute
@@ -115,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/route-planner': {
@@ -157,6 +177,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRoute,
   RoutePlannerRoute: RoutePlannerRoute,
   SolarCalculatorRoute: SolarCalculatorRoute,
   LocationsSlugRoute: LocationsSlugRoute,
