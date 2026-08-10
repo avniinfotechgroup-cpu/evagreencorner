@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import {
+  ArrowRight,
   BatteryCharging,
   Clock,
   Crosshair,
@@ -11,9 +12,12 @@ import {
   Star,
   Zap,
 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { STATIONS, type ChargingStation } from "@/data/stations";
+import { getAirQuality } from "@/data/aqi";
 import { siteConfig } from "@/config/platform";
 import { StationMap } from "./StationMap";
+import { AqiPanel } from "./AqiPanel";
 
 const QUICK_FILTERS = ["All", "Fast DC", "CCS2", "Type 2", "Open 24×7", "Available now"] as const;
 type QuickFilter = (typeof QUICK_FILTERS)[number];
@@ -56,6 +60,8 @@ export function StationFinder() {
       )
       .sort((a, b) => a.distanceKm - b.distanceKm);
   }, [submitted, filter]);
+
+  const activeStation = results.find((s) => s.id === activeId) ?? results[0];
 
   const useCurrentLocation = () => {
     setLocating(true);
@@ -145,11 +151,13 @@ export function StationFinder() {
           <ul className="max-h-[30rem] space-y-2.5 overflow-y-auto pr-1">
             {results.map((s) => (
               <li key={s.id}>
-                <button
-                  type="button"
+                <div
+                  role="button"
+                  tabIndex={0}
                   onClick={() => setActiveId(s.id)}
+                  onKeyDown={(e) => e.key === "Enter" && setActiveId(s.id)}
                   className={
-                    "w-full rounded-2xl border p-4 text-left transition-colors " +
+                    "w-full cursor-pointer rounded-2xl border p-4 text-left transition-colors " +
                     (activeId === s.id
                       ? "border-primary/50 bg-accent/60"
                       : "border-border bg-background hover:bg-surface")
@@ -207,7 +215,17 @@ export function StationFinder() {
                       </span>
                     ))}
                   </div>
-                </button>
+
+                  <Link
+                    to="/stations/$stationId"
+                    params={{ stationId: s.id }}
+                    onClick={(e) => e.stopPropagation()}
+                    className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-border bg-secondary px-3 py-1.5 text-[11px] font-semibold text-secondary-foreground hover:bg-accent"
+                  >
+                    View details
+                    <ArrowRight className="size-3.5" />
+                  </Link>
+                </div>
               </li>
             ))}
 
@@ -223,7 +241,10 @@ export function StationFinder() {
           </ul>
         </div>
 
-        <StationMap stations={results} activeId={activeId} onSelect={setActiveId} />
+        <div className="space-y-5">
+          <StationMap stations={results} activeId={activeId} onSelect={setActiveId} />
+          <AqiPanel data={getAirQuality(activeStation?.area ?? submitted)} compact />
+        </div>
       </div>
     </>
   );
