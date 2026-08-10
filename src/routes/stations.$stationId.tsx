@@ -173,7 +173,7 @@ function StationDetail() {
             <section className="mt-6 rounded-3xl border border-border bg-card p-6 shadow-soft">
               <h2 className="font-display text-lg font-bold">Connectors & availability</h2>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                {station.connectors.map((c, i) => {
+                {station.connectors.map((c: string, i: number) => {
                   const bays = Math.max(1, Math.round(station.total / station.connectors.length));
                   const free = Math.min(station.available, i === 0 ? station.available : Math.max(0, station.available - 1));
                   const dc = c === "CCS2" || c === "CHAdeMO" || c === "GB/T";
