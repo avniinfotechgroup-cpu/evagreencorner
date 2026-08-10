@@ -1,6 +1,7 @@
-import { Leaf, MapPin, Menu } from "lucide-react";
+import { Bookmark, Leaf, MapPin, Menu } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { siteConfig } from "@/config/platform";
+import { useSaved } from "@/lib/savedItems";
 
 const NAV = [
   { label: "Charging", href: "/" },
@@ -12,6 +13,9 @@ const NAV = [
 ];
 
 export function SiteHeader() {
+  const saved = useSaved();
+  const savedCount = saved.stations.length + saved.routes.length;
+
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-5">
