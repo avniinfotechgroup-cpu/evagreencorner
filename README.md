@@ -15,17 +15,11 @@ Carbon footprint calculator
 
 Water footprint calculator
 
-Green Home Score
-
 Solar calculator
 
 Environmental calculators
 
 Green services directory
-
-Location-based environmental information
-
-SEO landing pages
 
 Future lead-generation marketplace
 

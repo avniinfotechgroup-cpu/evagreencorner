@@ -1,0 +1,23 @@
+services:
+  web:
+    build:
+      context: .
+      args:
+        VITE_APP_URL: ${VITE_APP_URL:-https://evagreencorner.com}
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3000
+      NODE_ENV: production
+    volumes:
+      # Keep DB + uploaded images across restarts
+      - eva_data:/app/data
+      - eva_uploads:/app/public/uploads
+    restart: unless-stopped
+
+volumes:
+  eva_data:
+  eva_uploads:

@@ -12,6 +12,13 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { ModuleThemeSync } from "@/components/platform/ModuleThemeSync";
+import { PageLoader } from "@/components/platform/PageLoader";
+import { SiteTrackingScripts } from "@/components/platform/SiteTrackingScripts";
+import { JsonLd } from "@/lib/seo/JsonLd";
+import { organizationJsonLd, websiteJsonLd } from "@/lib/seo/site";
+import { getPublicSiteScripts } from "@/lib/platform/cms.functions";
+import { DEFAULT_SITE_SCRIPTS } from "@/lib/platform/site-scripts.shared";
 
 function NotFoundComponent() {
   return (
@@ -74,28 +81,51 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  loader: async () => {
+    try {
+      const res = await getPublicSiteScripts();
+      return { scripts: res.scripts };
+    } catch {
+      return { scripts: DEFAULT_SITE_SCRIPTS };
+    }
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Verdiq — EV charging & environmental platform" },
+      { title: "EVA Green Corner — Find EV charging stations near you" },
       {
         name: "description",
         content:
-          "Find EV charging stations, plan routes, check air quality and measure your carbon, water and solar impact.",
+          "Find EV charging stations on EVA Green Corner. Search by city or location, compare connectors, and plan your charge stops.",
       },
-      { name: "author", content: "Verdiq" },
-      { property: "og:title", content: "Verdiq — EV charging & environmental platform" },
+      { name: "author", content: "EVA Green Corner" },
+      {
+        name: "robots",
+        content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      },
+      { name: "googlebot", content: "index, follow" },
+      { name: "theme-color", content: "#0f3d2e" },
+      { property: "og:title", content: "EVA Green Corner — Find EV charging stations near you" },
       {
         property: "og:description",
         content:
-          "Find EV charging stations, plan routes, check air quality and measure your carbon, water and solar impact.",
+          "Find EV charging stations on EVA Green Corner. Search by city or location, compare connectors, and plan your charge stops.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://evagreencorner.com" },
+      { property: "og:site_name", content: "EVA Green Corner" },
+      { property: "og:locale", content: "en_IN" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "canonical", href: "https://evagreencorner.com/" },
+      { rel: "sitemap", type: "application/xml", href: "/sitemap.xml" },
+      { rel: "icon", href: "/favicon-32.png?v=3", type: "image/png", sizes: "32x32" },
+      { rel: "icon", href: "/favicon-48.png?v=3", type: "image/png", sizes: "48x48" },
+      { rel: "icon", href: "/favicon-icon.png?v=3", type: "image/png", sizes: "any" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png?v=3", sizes: "180x180" },
+      { rel: "shortcut icon", href: "/favicon.png?v=3", type: "image/png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -106,21 +136,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
 
   shellComponent: RootShell,
   component: RootComponent,
+  pendingComponent: () => <PageLoader label="Loading EVA Green Corner…" />,
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
 });
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en-IN">
       <head>
         <HeadContent />
+        <JsonLd data={organizationJsonLd()} />
+        <JsonLd data={websiteJsonLd()} />
       </head>
       <body>
         {children}
@@ -132,9 +164,12 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { scripts } = Route.useLoaderData();
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ModuleThemeSync />
+      <SiteTrackingScripts scripts={scripts ?? DEFAULT_SITE_SCRIPTS} />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <Toaster position="top-center" />

@@ -1,47 +1,78 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { Coins, Home, Leaf, PiggyBank, Sun, Timer, Zap } from "lucide-react";
 import { siteConfig } from "@/config/platform";
 import { SiteHeader } from "@/components/platform/SiteHeader";
 import { SiteFooter } from "@/components/platform/SiteFooter";
+import { BannerMenu } from "@/components/platform/BannerMenu";
+import { IconicLoader } from "@/components/platform/IconicLoader";
 import {
   ROOF_TYPES,
   SHADING,
   SOLAR_LOCATIONS,
   estimateSolar,
   inr,
+  type SolarEstimate,
+  type SolarLocation,
 } from "@/data/solar";
+import { estimateSolarLive } from "@/lib/ev/solar.functions";
+import { getPublicSolarLocations } from "@/lib/platform/cms.functions";
+import { buildPageHead } from "@/lib/seo/site";
+import { loadPageSeo } from "@/lib/seo/load-page-seo";
 
 const TITLE = `Rooftop Solar Calculator — size, savings & payback | ${siteConfig.name}`;
 const DESCRIPTION =
-  "Estimate your rooftop solar system size in kW, monthly electricity savings, subsidy-adjusted cost and payback period for your location in minutes.";
+  "Estimate rooftop solar size in kW using India city DISCOM tariff benchmarks and EU PVGIS sun hours — savings, subsidy and payback in minutes.";
 
 export const Route = createFileRoute("/solar-calculator")({
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  loader: () => loadPageSeo("/solar-calculator"),
+  head: ({ loaderData }) =>
+    loaderData?.head ??
+    buildPageHead({
+      title: TITLE,
+      description: DESCRIPTION,
+      path: "/solar-calculator",
+    }),
   component: SolarCalculatorPage,
 });
 
 function SolarCalculatorPage() {
+  const fetchLive = useServerFn(estimateSolarLive);
+  const fetchLocations = useServerFn(getPublicSolarLocations);
+  const [locations, setLocations] = useState<SolarLocation[]>(SOLAR_LOCATIONS);
   const [slug, setSlug] = useState(SOLAR_LOCATIONS[0]!.slug);
   const [roofAreaSqft, setRoofArea] = useState(600);
   const [roofType, setRoofType] = useState(ROOF_TYPES[0]!.id);
   const [shading, setShading] = useState(SHADING[0]!.id);
   const [monthlyBill, setMonthlyBill] = useState(4500);
   const [applySubsidy, setSubsidy] = useState(true);
+  const [result, setResult] = useState<SolarEstimate | null>(null);
+  const [sunHours, setSunHours] = useState(SOLAR_LOCATIONS[0]!.sunHours);
+  const [source, setSource] = useState<"pvgis" | "benchmark">("benchmark");
+  const [warning, setWarning] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const location = SOLAR_LOCATIONS.find((l) => l.slug === slug)!;
+  useEffect(() => {
+    void fetchLocations()
+      .then((res) => {
+        if (res.locations?.length) {
+          setLocations(res.locations);
+          setSlug((prev) =>
+            res.locations.some((l) => l.slug === prev) ? prev : res.locations[0]!.slug,
+          );
+        }
+      })
+      .catch(() => {
+        /* keep static fallback */
+      });
+  }, [fetchLocations]);
 
-  const result = useMemo(
-    () =>
+  const location = locations.find((l) => l.slug === slug) ?? locations[0]!;
+
+  useEffect(() => {
+    // Instant local preview
+    setResult(
       estimateSolar({
         location,
         roofAreaSqft,
@@ -50,26 +81,67 @@ function SolarCalculatorPage() {
         monthlyBill,
         applySubsidy,
       }),
-    [location, roofAreaSqft, roofType, shading, monthlyBill, applySubsidy],
-  );
+    );
+    setSunHours(location.sunHours);
+    setSource("benchmark");
+
+    let cancelled = false;
+    const t = window.setTimeout(() => {
+      setLoading(true);
+      void fetchLive({
+        data: {
+          locationSlug: slug,
+          roofAreaSqft,
+          usableFactor: ROOF_TYPES.find((r) => r.id === roofType)!.usable,
+          shadingFactor: SHADING.find((s) => s.id === shading)!.factor,
+          monthlyBill,
+          applySubsidy,
+        },
+      })
+        .then((res) => {
+          if (cancelled) return;
+          setResult(res.estimate);
+          setSunHours(res.location.sunHours);
+          setSource(res.source);
+          setWarning(res.warning);
+        })
+        .catch(() => {
+          if (cancelled) return;
+          setWarning("Live PVGIS lookup failed — showing city benchmark.");
+        })
+        .finally(() => {
+          if (!cancelled) setLoading(false);
+        });
+    }, 400);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(t);
+    };
+  }, [slug, roofAreaSqft, roofType, shading, monthlyBill, applySubsidy, location, fetchLive]);
 
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
 
       <main>
-        <section className="border-b border-border bg-canopy">
-          <div className="mx-auto max-w-7xl px-5 py-14">
+        <section className="bg-canopy">
+          <div className="mx-auto max-w-7xl px-5 pb-14 pt-8">
+            <BannerMenu />
             <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold text-primary-foreground/90">
               <Sun className="size-3.5" />
-              Solar module
+              Solar module · live sun hours
             </span>
             <h1 className="mt-4 max-w-2xl font-display text-4xl font-bold text-primary-foreground sm:text-5xl">
               How much solar fits on your roof?
             </h1>
             <p className="mt-3 max-w-2xl text-sm text-primary-foreground/75">
               Size the system, see monthly savings after subsidy, and know the year your
-              rooftop pays for itself — tuned to sunlight and tariffs in your location.
+              rooftop pays for itself — sun hours refreshed from EU PVGIS where available.
+            </p>
+            <p className="mt-3 max-w-2xl rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 px-3.5 py-2 text-xs text-primary-foreground/90">
+              Sun hours: EU PVGIS (live) with city fallback. Tariffs & ₹/kW: DISCOM / market
+              benchmarks by city. Planning estimate only — not a DISCOM bill or installer quote.
             </p>
           </div>
         </section>
@@ -86,13 +158,25 @@ function SolarCalculatorPage() {
                 onChange={(e) => setSlug(e.target.value)}
                 className="mt-1.5 w-full rounded-xl border border-border bg-surface px-3.5 py-3 text-sm font-medium text-foreground"
               >
-                {SOLAR_LOCATIONS.map((l) => (
+                {locations.map((l) => (
                   <option key={l.slug} value={l.slug}>
-                    {l.name} · {l.sunHours} sun hrs/day · ₹{l.tariff}/unit
+                    {l.name}, {l.state} · {l.sunHours} sun hrs/day · ₹{l.tariff}/unit · {l.discom}
                   </option>
                 ))}
               </select>
             </label>
+            <div className="mt-2 rounded-xl border border-border bg-surface px-3.5 py-3 text-xs text-muted-foreground">
+              <p>
+                <span className="font-semibold text-foreground">{location.name}</span>
+                {" · "}
+                {location.state} · {location.discom}
+              </p>
+              <p className="mt-1">
+                Benchmark: {location.sunHours} peak sun hrs/day · ₹{location.tariff}/kWh · ~
+                {inr(location.costPerKw)}/kW installed · grid {location.gridCo2} kg CO₂/kWh
+              </p>
+              {location.notes ? <p className="mt-1">{location.notes}</p> : null}
+            </div>
 
             <label className="mt-5 block text-xs font-semibold text-muted-foreground">
               Usable roof area — {roofAreaSqft} sq ft
@@ -175,12 +259,39 @@ function SolarCalculatorPage() {
 
           {/* Results */}
           <div className="space-y-6">
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <span className="rounded-full border border-border bg-card px-3 py-1 font-semibold">
+                Sun hours: {sunHours}/day
+              </span>
+              <span className="rounded-full border border-border bg-card px-3 py-1 font-semibold">
+                {source === "pvgis" ? "Live PVGIS" : "City benchmark"}
+              </span>
+              {loading ? (
+                <span className="inline-flex items-center gap-1 text-muted-foreground">
+                  <IconicLoader size="sm" label="Refreshing live sun data…" />
+                </span>
+              ) : null}
+            </div>
+            {warning ? (
+              <p className="rounded-2xl border border-border bg-card px-4 py-2 text-xs text-muted-foreground">
+                {warning}
+              </p>
+            ) : null}
+
             <div className="rounded-3xl border border-border bg-card p-6 shadow-soft">
               <div className="grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-3">
                 {[
-                  { icon: Zap, label: "Recommended size", value: `${result.systemKw} kW` },
-                  { icon: PiggyBank, label: "Monthly savings", value: inr(result.monthlySavings) },
-                  { icon: Timer, label: "Payback", value: `${result.paybackYears} yrs` },
+                  { icon: Zap, label: "Recommended size", value: `${result?.systemKw ?? "—"} kW` },
+                  {
+                    icon: PiggyBank,
+                    label: "Monthly savings",
+                    value: result ? inr(result.monthlySavings) : "—",
+                  },
+                  {
+                    icon: Timer,
+                    label: "Payback",
+                    value: result ? `${result.paybackYears} yrs` : "—",
+                  },
                 ].map((m) => (
                   <div key={m.label} className="bg-card px-4 py-5">
                     <m.icon className="size-4 text-leaf" />
@@ -192,12 +303,22 @@ function SolarCalculatorPage() {
 
               <dl className="mt-5 grid gap-3 sm:grid-cols-2">
                 {[
-                  { k: "Panels (545 W)", v: `${result.panels} modules` },
-                  { k: "Usable roof", v: `${result.usableAreaSqm} m²` },
-                  { k: "Generation", v: `${result.monthlyUnits} units/month` },
-                  { k: "Bill offset", v: `${result.billOffsetPct}%` },
-                  { k: "System cost", v: inr(result.grossCost) },
-                  { k: "Subsidy", v: result.subsidy ? `− ${inr(result.subsidy)}` : "Not applied" },
+                  { k: "Panels (545 W)", v: result ? `${result.panels} modules` : "—" },
+                  { k: "Usable roof", v: result ? `${result.usableAreaSqm} m²` : "—" },
+                  {
+                    k: "Generation",
+                    v: result ? `${result.monthlyUnits} units/month` : "—",
+                  },
+                  { k: "Bill offset", v: result ? `${result.billOffsetPct}%` : "—" },
+                  { k: "System cost", v: result ? inr(result.grossCost) : "—" },
+                  {
+                    k: "Subsidy",
+                    v: result
+                      ? result.subsidy
+                        ? `− ${inr(result.subsidy)}`
+                        : "Not applied"
+                      : "—",
+                  },
                 ].map((row) => (
                   <div
                     key={row.k}
@@ -214,7 +335,9 @@ function SolarCalculatorPage() {
                   <Coins className="size-4" />
                   <span className="text-sm font-semibold">Net investment</span>
                 </div>
-                <span className="font-display text-2xl font-bold">{inr(result.netCost)}</span>
+                <span className="font-display text-2xl font-bold">
+                  {result ? inr(result.netCost) : "—"}
+                </span>
               </div>
             </div>
 
@@ -225,9 +348,21 @@ function SolarCalculatorPage() {
               </p>
               <div className="mt-4 grid gap-3 sm:grid-cols-3">
                 {[
-                  { icon: PiggyBank, label: "Lifetime savings", value: inr(result.lifetimeSavings) },
-                  { icon: Leaf, label: "CO₂ avoided / yr", value: `${result.co2TonnesPerYear} t` },
-                  { icon: Home, label: "Trees equivalent", value: `${result.treesEquivalent}` },
+                  {
+                    icon: PiggyBank,
+                    label: "Lifetime savings",
+                    value: result ? inr(result.lifetimeSavings) : "—",
+                  },
+                  {
+                    icon: Leaf,
+                    label: "CO₂ avoided / yr",
+                    value: result ? `${result.co2TonnesPerYear} t` : "—",
+                  },
+                  {
+                    icon: Home,
+                    label: "Trees equivalent",
+                    value: result ? `${result.treesEquivalent}` : "—",
+                  },
                 ].map((m) => (
                   <div key={m.label} className="rounded-2xl border border-border bg-surface p-4">
                     <m.icon className="size-4 text-leaf" />

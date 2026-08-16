@@ -1,115 +1,173 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { BadgeCheck, Gauge, Leaf, PlugZap } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
+import { ArrowRight, Leaf, Zap } from "lucide-react";
 import heroImage from "@/assets/hero-charging.jpg";
 import { siteConfig } from "@/config/platform";
 import { SiteHeader } from "@/components/platform/SiteHeader";
 import { SiteFooter } from "@/components/platform/SiteFooter";
-import { StationFinder } from "@/components/platform/StationFinder";
-import { PopularAreas } from "@/components/platform/PopularAreas";
+import { BannerMenu } from "@/components/platform/BannerMenu";
 import { ModuleGrid } from "@/components/platform/ModuleGrid";
+import { PopularAreas } from "@/components/platform/PopularAreas";
+import { AnimatedHeroBackdrop } from "@/components/platform/AnimatedHeroBackdrop";
+import { JsonLd } from "@/lib/seo/JsonLd";
+import { absoluteUrl, buildPageHead } from "@/lib/seo/site";
+import { loadPageSeo } from "@/lib/seo/load-page-seo";
+import { getPublicHomeContent } from "@/lib/platform/cms.functions";
+import { DEFAULT_HOME_CONTENT, type HomeContent } from "@/lib/platform/home-content.shared";
 
-const TITLE = `${siteConfig.name} — Find EV charging stations near you`;
+const TITLE = `${siteConfig.name} — EV Charging Map, Route Planner & Green Tools India`;
 const DESCRIPTION =
-  "Search EV charging stations by pincode, area or current location. Live availability, tariffs and connectors, plus air quality, solar and carbon tools.";
+  "EVA Green Corner helps India find live EV charging stations, plan charge stops, check air quality, estimate carbon & water footprint, size rooftop solar, and explore EVs, jobs and green services.";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
-  component: Index,
+  loader: async () => {
+    const [seo, homeRes] = await Promise.all([
+      loadPageSeo("/"),
+      getPublicHomeContent().catch(() => ({ home: DEFAULT_HOME_CONTENT })),
+    ]);
+    return { seo, home: homeRes.home };
+  },
+  head: ({ loaderData }) =>
+    loaderData?.seo?.head ??
+    buildPageHead({ title: TITLE, description: DESCRIPTION, path: "/" }),
+  component: HomePage,
 });
 
-const STATS = [
-  { icon: PlugZap, value: "12,480+", label: "Charging points mapped" },
-  { icon: Gauge, value: "Live", label: "Availability & tariffs" },
-  { icon: Leaf, value: "9", label: "Environmental tools" },
-  { icon: BadgeCheck, value: "1,200+", label: "Verified green partners" },
-];
+function HomePage() {
+  const { home } = Route.useLoaderData();
+  const content: HomeContent = home ?? DEFAULT_HOME_CONTENT;
+  const heroSrc = content.heroImageUrl?.trim() || heroImage;
+  const faqs = content.faqs?.length ? content.faqs : DEFAULT_HOME_CONTENT.faqs;
 
-function Index() {
+  const webSiteLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteConfig.name,
+    url: absoluteUrl("/"),
+    description: DESCRIPTION,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${absoluteUrl("/find-chargers")}?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  };
+
+  const orgLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: siteConfig.name,
+    url: absoluteUrl("/"),
+    email: siteConfig.supportEmail,
+    description: DESCRIPTION,
+  };
+
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <JsonLd data={webSiteLd} />
+      <JsonLd data={orgLd} />
+      <JsonLd data={faqLd} />
       <SiteHeader />
 
       <main>
-        {/* Hero */}
-        <section className="relative overflow-hidden">
-          <img
-            src={heroImage}
-            alt="Electric vehicle charging under a solar canopy surrounded by trees"
-            width={1600}
-            height={1000}
-            className="absolute inset-0 size-full object-cover"
-          />
-          <div className="absolute inset-0 bg-canopy opacity-[0.88]" />
+        <section className="relative overflow-x-clip overflow-y-visible">
+          <AnimatedHeroBackdrop imageSrc={heroSrc} alt={content.heroImageAlt} />
 
-          <div className="relative mx-auto max-w-5xl px-5 pb-14 pt-20 text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-3.5 py-1.5 text-xs font-semibold text-primary-foreground backdrop-blur">
-              <Leaf className="size-3.5" />
-              {siteConfig.tagline}
-            </span>
-            <h1 className="mx-auto mt-6 max-w-3xl text-balance font-display text-4xl font-bold leading-[1.08] text-primary-foreground sm:text-5xl md:text-6xl">
-              Find an EV charging station near you
-            </h1>
-            <p className="mx-auto mt-4 max-w-xl text-pretty text-base text-primary-foreground/80">
-              Enter a pincode, area or landmark — or use your current location — to see live
-              availability, connector types and tariffs on the map.
+          <div className="relative z-10 mx-auto max-w-6xl overflow-visible px-5 pb-16 pt-8 text-center sm:pt-10">
+            <BannerMenu />
+            <p className="mt-2 inline-flex items-center gap-2 text-xs font-medium tracking-wide text-primary-foreground/75">
+              <Leaf className="size-3.5 text-volt" />
+              {content.heroTagline}
             </p>
-          </div>
-
-          <div className="relative mx-auto max-w-6xl px-5 pb-16">
-            <StationFinder />
+            <h1 className="mx-auto mt-3 max-w-3xl text-balance font-display text-3xl font-bold leading-[1.1] text-primary-foreground sm:text-4xl md:text-5xl">
+              {content.heroHeadline}
+            </h1>
+            <p className="mx-auto mt-4 max-w-2xl text-pretty text-sm leading-relaxed text-primary-foreground/80 sm:text-base">
+              {content.heroSubcopy}
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <a
+                href={content.primaryCtaHref || "/find-chargers"}
+                className="inline-flex items-center gap-2 rounded-2xl bg-volt-gradient px-6 py-3.5 text-sm font-semibold text-volt-foreground shadow-soft"
+              >
+                <Zap className="size-4" />
+                {content.primaryCtaLabel}
+                <ArrowRight className="size-4" />
+              </a>
+              <a
+                href={content.secondaryCtaHref || "/route-planner"}
+                className="inline-flex items-center gap-2 rounded-2xl border border-primary-foreground/35 px-6 py-3.5 text-sm font-semibold text-primary-foreground hover:bg-primary-foreground/10"
+              >
+                {content.secondaryCtaLabel}
+              </a>
+            </div>
           </div>
         </section>
 
-        {/* Stats */}
-        <section className="border-b border-border bg-card">
-          <div className="mx-auto grid max-w-7xl grid-cols-2 gap-px bg-border md:grid-cols-4">
-            {STATS.map((s) => (
-              <div key={s.label} className="bg-card px-6 py-8">
-                <s.icon className="size-5 text-leaf" />
-                <p className="mt-3 font-display text-2xl font-bold">{s.value}</p>
-                <p className="mt-0.5 text-xs text-muted-foreground">{s.label}</p>
+        <section className="mx-auto max-w-3xl px-5 py-14 text-center">
+          <h2 className="font-display text-2xl font-bold sm:text-3xl">{content.introHeading}</h2>
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+            {content.introBody}
+          </p>
+        </section>
+
+        <ModuleGrid
+          eyebrow={content.modulesEyebrow}
+          heading={content.modulesHeading}
+          body={content.modulesBody}
+        />
+
+        <PopularAreas
+          eyebrow={content.popularEyebrow}
+          heading={content.popularHeading}
+          body={content.popularBody}
+          ctaLabel={content.popularCtaLabel}
+          areas={content.popularAreas}
+        />
+
+        <section className="mx-auto max-w-3xl px-5 py-16 text-center">
+          <h2 className="font-display text-2xl font-bold sm:text-3xl">{content.faqHeading}</h2>
+          <dl className="mt-8 space-y-5 text-left">
+            {faqs.map((f) => (
+              <div key={f.q} className="rounded-2xl border border-border bg-card p-5 shadow-soft">
+                <dt className="font-display text-base font-bold">{f.q}</dt>
+                <dd className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.a}</dd>
               </div>
             ))}
-          </div>
+          </dl>
         </section>
 
-        <PopularAreas />
-        <ModuleGrid />
-
-        {/* CTA */}
-        <section className="mx-auto max-w-7xl px-5 py-20">
+        <section className="mx-auto max-w-7xl px-5 pb-20">
           <div className="relative overflow-hidden rounded-3xl bg-canopy px-8 py-14 text-center">
             <div className="absolute inset-0 grid-lines opacity-20" />
             <div className="relative">
-              <h2 className="mx-auto max-w-2xl text-balance font-display text-3xl font-bold text-primary-foreground">
-                Know your footprint before your next drive
+              <h2 className="mx-auto max-w-2xl font-display text-3xl font-bold text-primary-foreground">
+                {content.bottomHeading}
               </h2>
               <p className="mx-auto mt-3 max-w-lg text-sm text-primary-foreground/80">
-                Combine charging data with carbon, water and solar calculators to see the real
-                impact of every kilometre.
+                {content.bottomBody}
               </p>
               <div className="mt-7 flex flex-wrap justify-center gap-3">
                 <a
-                  href="/carbon-calculator"
+                  href={content.bottomPrimaryHref || "/find-chargers"}
                   className="rounded-xl bg-volt-gradient px-6 py-3 text-sm font-semibold text-volt-foreground"
                 >
-                  Calculate my footprint
+                  {content.bottomPrimaryLabel}
                 </a>
-                <Link
-                  to="/route-planner"
+                <a
+                  href={content.bottomSecondaryHref || "/air-quality"}
                   className="rounded-xl border border-primary-foreground/30 px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary-foreground/10"
                 >
-                  Plan an EV route
-                </Link>
+                  {content.bottomSecondaryLabel}
+                </a>
               </div>
             </div>
           </div>

@@ -12,22 +12,27 @@ function ModuleIcon({ name }: { name: string }) {
   return <Icon className="size-5" strokeWidth={2} />;
 }
 
-export function ModuleGrid() {
+type Props = {
+  eyebrow?: string;
+  heading?: string;
+  body?: string;
+};
+
+export function ModuleGrid({
+  eyebrow = "One platform, many modules",
+  heading = "Everything green, under one roof",
+  body = "Each module is registered in a single configuration file, so new calculators, directories or content systems plug in without touching the core.",
+}: Props) {
   return (
     <section className="border-y border-border bg-surface">
       <div className="mx-auto max-w-7xl px-5 py-16">
-        <div className="max-w-2xl">
+        <div className="mx-auto max-w-2xl text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-muted-foreground">
             <Icons.LayoutGrid className="size-3.5 text-leaf" />
-            One platform, many modules
+            {eyebrow}
           </span>
-          <h2 className="mt-4 font-display text-3xl font-bold">
-            Everything green, under one roof
-          </h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Each module is registered in a single configuration file, so new calculators,
-            directories or content systems plug in without touching the core.
-          </p>
+          <h2 className="mt-4 font-display text-3xl font-bold">{heading}</h2>
+          <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">{body}</p>
         </div>
 
         <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

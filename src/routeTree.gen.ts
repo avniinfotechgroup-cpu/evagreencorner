@@ -10,16 +10,61 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AirQualityRouteImport } from './routes/air-quality'
+import { Route as CarbonCalculatorRouteImport } from './routes/carbon-calculator'
+import { Route as ChargersRouteImport } from './routes/chargers'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as DirectoryRouteImport } from './routes/directory'
+import { Route as FindChargersRouteImport } from './routes/find-chargers'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as RewardsRouteImport } from './routes/rewards'
 import { Route as RoutePlannerRouteImport } from './routes/route-planner'
+import { Route as SitemapEvDotxmlRouteImport } from './routes/sitemap-ev[.]xml'
+import { Route as SitemapPagesDotxmlRouteImport } from './routes/sitemap-pages[.]xml'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SolarCalculatorRouteImport } from './routes/solar-calculator'
-import { Route as LocationsIndexRouteImport } from './routes/locations.index'
-import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
+import { Route as WaterCalculatorRouteImport } from './routes/water-calculator'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
+import { Route as EvIndexRouteImport } from './routes/ev.index'
+import { Route as EvCategorySlugRouteImport } from './routes/ev.$categorySlug'
+import { Route as EvCompareRouteImport } from './routes/ev.compare'
+import { Route as JobAndInternshipIndexRouteImport } from './routes/job-and-internship.index'
+import { Route as JobAndInternshipSlugRouteImport } from './routes/job-and-internship.$slug'
+import { Route as JobsIndexRouteImport } from './routes/jobs.index'
+import { Route as JobsSlugRouteImport } from './routes/jobs.$slug'
+import { Route as JournalIndexRouteImport } from './routes/journal.index'
+import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
+import { Route as MarketplaceIndexRouteImport } from './routes/marketplace.index'
 import { Route as StationsStationIdRouteImport } from './routes/stations.$stationId'
+import { Route as JournalPolicySlugRouteImport } from './routes/journal.policy.$slug'
+import { Route as MarketplaceCategorySlugRouteImport } from './routes/marketplace.category.$slug'
+import { Route as MarketplaceProvidersSlugRouteImport } from './routes/marketplace.providers.$slug'
+import { Route as EvCategorySlugBrandSlugVehicleSlugRouteImport } from './routes/ev.$categorySlug_.$brandSlug.$vehicleSlug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AirQualityRoute = AirQualityRouteImport.update({
+  id: '/air-quality',
+  path: '/air-quality',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CarbonCalculatorRoute = CarbonCalculatorRouteImport.update({
+  id: '/carbon-calculator',
+  path: '/carbon-calculator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChargersRoute = ChargersRouteImport.update({
+  id: '/chargers',
+  path: '/chargers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -27,9 +72,44 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DirectoryRoute = DirectoryRouteImport.update({
+  id: '/directory',
+  path: '/directory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FindChargersRoute = FindChargersRouteImport.update({
+  id: '/find-chargers',
+  path: '/find-chargers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RewardsRoute = RewardsRouteImport.update({
+  id: '/rewards',
+  path: '/rewards',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RoutePlannerRoute = RoutePlannerRouteImport.update({
   id: '/route-planner',
   path: '/route-planner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapEvDotxmlRoute = SitemapEvDotxmlRouteImport.update({
+  id: '/sitemap-ev.xml',
+  path: '/sitemap-ev.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapPagesDotxmlRoute = SitemapPagesDotxmlRouteImport.update({
+  id: '/sitemap-pages.xml',
+  path: '/sitemap-pages.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SolarCalculatorRoute = SolarCalculatorRouteImport.update({
@@ -37,14 +117,64 @@ const SolarCalculatorRoute = SolarCalculatorRouteImport.update({
   path: '/solar-calculator',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LocationsIndexRoute = LocationsIndexRouteImport.update({
-  id: '/locations/',
-  path: '/locations/',
+const WaterCalculatorRoute = WaterCalculatorRouteImport.update({
+  id: '/water-calculator',
+  path: '/water-calculator',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LocationsSlugRoute = LocationsSlugRouteImport.update({
-  id: '/locations/$slug',
-  path: '/locations/$slug',
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EvIndexRoute = EvIndexRouteImport.update({
+  id: '/ev/',
+  path: '/ev/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EvCategorySlugRoute = EvCategorySlugRouteImport.update({
+  id: '/ev/$categorySlug',
+  path: '/ev/$categorySlug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EvCompareRoute = EvCompareRouteImport.update({
+  id: '/ev/compare',
+  path: '/ev/compare',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobAndInternshipIndexRoute = JobAndInternshipIndexRouteImport.update({
+  id: '/job-and-internship/',
+  path: '/job-and-internship/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobAndInternshipSlugRoute = JobAndInternshipSlugRouteImport.update({
+  id: '/job-and-internship/$slug',
+  path: '/job-and-internship/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsIndexRoute = JobsIndexRouteImport.update({
+  id: '/jobs/',
+  path: '/jobs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsSlugRoute = JobsSlugRouteImport.update({
+  id: '/jobs/$slug',
+  path: '/jobs/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalIndexRoute = JournalIndexRouteImport.update({
+  id: '/journal/',
+  path: '/journal/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalSlugRoute = JournalSlugRouteImport.update({
+  id: '/journal/$slug',
+  path: '/journal/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketplaceIndexRoute = MarketplaceIndexRouteImport.update({
+  id: '/marketplace/',
+  path: '/marketplace/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StationsStationIdRoute = StationsStationIdRouteImport.update({
@@ -52,73 +182,270 @@ const StationsStationIdRoute = StationsStationIdRouteImport.update({
   path: '/stations/$stationId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JournalPolicySlugRoute = JournalPolicySlugRouteImport.update({
+  id: '/journal/policy/$slug',
+  path: '/journal/policy/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketplaceCategorySlugRoute = MarketplaceCategorySlugRouteImport.update({
+  id: '/marketplace/category/$slug',
+  path: '/marketplace/category/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketplaceProvidersSlugRoute =
+  MarketplaceProvidersSlugRouteImport.update({
+    id: '/marketplace/providers/$slug',
+    path: '/marketplace/providers/$slug',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EvCategorySlugBrandSlugVehicleSlugRoute =
+  EvCategorySlugBrandSlugVehicleSlugRouteImport.update({
+    id: '/ev/$categorySlug_/$brandSlug/$vehicleSlug',
+    path: '/ev/$categorySlug/$brandSlug/$vehicleSlug',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/air-quality': typeof AirQualityRoute
+  '/carbon-calculator': typeof CarbonCalculatorRoute
+  '/chargers': typeof ChargersRoute
   '/dashboard': typeof DashboardRoute
+  '/directory': typeof DirectoryRoute
+  '/find-chargers': typeof FindChargersRoute
+  '/login': typeof LoginRoute
+  '/rewards': typeof RewardsRoute
   '/route-planner': typeof RoutePlannerRoute
+  '/sitemap-ev.xml': typeof SitemapEvDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar-calculator': typeof SolarCalculatorRoute
-  '/locations/$slug': typeof LocationsSlugRoute
+  '/water-calculator': typeof WaterCalculatorRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/ev/$categorySlug': typeof EvCategorySlugRoute
+  '/ev/compare': typeof EvCompareRoute
+  '/job-and-internship/$slug': typeof JobAndInternshipSlugRoute
+  '/jobs/$slug': typeof JobsSlugRoute
+  '/journal/$slug': typeof JournalSlugRoute
   '/stations/$stationId': typeof StationsStationIdRoute
-  '/locations/': typeof LocationsIndexRoute
+  '/ev/': typeof EvIndexRoute
+  '/job-and-internship/': typeof JobAndInternshipIndexRoute
+  '/jobs/': typeof JobsIndexRoute
+  '/journal/': typeof JournalIndexRoute
+  '/marketplace/': typeof MarketplaceIndexRoute
+  '/journal/policy/$slug': typeof JournalPolicySlugRoute
+  '/marketplace/category/$slug': typeof MarketplaceCategorySlugRoute
+  '/marketplace/providers/$slug': typeof MarketplaceProvidersSlugRoute
+  '/ev/$categorySlug/$brandSlug/$vehicleSlug': typeof EvCategorySlugBrandSlugVehicleSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/air-quality': typeof AirQualityRoute
+  '/carbon-calculator': typeof CarbonCalculatorRoute
+  '/chargers': typeof ChargersRoute
   '/dashboard': typeof DashboardRoute
+  '/directory': typeof DirectoryRoute
+  '/find-chargers': typeof FindChargersRoute
+  '/login': typeof LoginRoute
+  '/rewards': typeof RewardsRoute
   '/route-planner': typeof RoutePlannerRoute
+  '/sitemap-ev.xml': typeof SitemapEvDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar-calculator': typeof SolarCalculatorRoute
-  '/locations/$slug': typeof LocationsSlugRoute
+  '/water-calculator': typeof WaterCalculatorRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/ev/$categorySlug': typeof EvCategorySlugRoute
+  '/ev/compare': typeof EvCompareRoute
+  '/job-and-internship/$slug': typeof JobAndInternshipSlugRoute
+  '/jobs/$slug': typeof JobsSlugRoute
+  '/journal/$slug': typeof JournalSlugRoute
   '/stations/$stationId': typeof StationsStationIdRoute
-  '/locations': typeof LocationsIndexRoute
+  '/ev': typeof EvIndexRoute
+  '/job-and-internship': typeof JobAndInternshipIndexRoute
+  '/jobs': typeof JobsIndexRoute
+  '/journal': typeof JournalIndexRoute
+  '/marketplace': typeof MarketplaceIndexRoute
+  '/journal/policy/$slug': typeof JournalPolicySlugRoute
+  '/marketplace/category/$slug': typeof MarketplaceCategorySlugRoute
+  '/marketplace/providers/$slug': typeof MarketplaceProvidersSlugRoute
+  '/ev/$categorySlug/$brandSlug/$vehicleSlug': typeof EvCategorySlugBrandSlugVehicleSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/air-quality': typeof AirQualityRoute
+  '/carbon-calculator': typeof CarbonCalculatorRoute
+  '/chargers': typeof ChargersRoute
   '/dashboard': typeof DashboardRoute
+  '/directory': typeof DirectoryRoute
+  '/find-chargers': typeof FindChargersRoute
+  '/login': typeof LoginRoute
+  '/rewards': typeof RewardsRoute
   '/route-planner': typeof RoutePlannerRoute
+  '/sitemap-ev.xml': typeof SitemapEvDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/solar-calculator': typeof SolarCalculatorRoute
-  '/locations/$slug': typeof LocationsSlugRoute
+  '/water-calculator': typeof WaterCalculatorRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/ev/$categorySlug': typeof EvCategorySlugRoute
+  '/ev/compare': typeof EvCompareRoute
+  '/job-and-internship/$slug': typeof JobAndInternshipSlugRoute
+  '/jobs/$slug': typeof JobsSlugRoute
+  '/journal/$slug': typeof JournalSlugRoute
   '/stations/$stationId': typeof StationsStationIdRoute
-  '/locations/': typeof LocationsIndexRoute
+  '/ev/': typeof EvIndexRoute
+  '/job-and-internship/': typeof JobAndInternshipIndexRoute
+  '/jobs/': typeof JobsIndexRoute
+  '/journal/': typeof JournalIndexRoute
+  '/marketplace/': typeof MarketplaceIndexRoute
+  '/journal/policy/$slug': typeof JournalPolicySlugRoute
+  '/marketplace/category/$slug': typeof MarketplaceCategorySlugRoute
+  '/marketplace/providers/$slug': typeof MarketplaceProvidersSlugRoute
+  '/ev/$categorySlug_/$brandSlug/$vehicleSlug': typeof EvCategorySlugBrandSlugVehicleSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
+    | '/air-quality'
+    | '/carbon-calculator'
+    | '/chargers'
     | '/dashboard'
+    | '/directory'
+    | '/find-chargers'
+    | '/login'
+    | '/rewards'
     | '/route-planner'
+    | '/sitemap-ev.xml'
+    | '/sitemap-pages.xml'
+    | '/sitemap.xml'
     | '/solar-calculator'
-    | '/locations/$slug'
+    | '/water-calculator'
+    | '/auth/callback'
+    | '/ev/$categorySlug'
+    | '/ev/compare'
+    | '/job-and-internship/$slug'
+    | '/jobs/$slug'
+    | '/journal/$slug'
     | '/stations/$stationId'
-    | '/locations/'
+    | '/ev/'
+    | '/job-and-internship/'
+    | '/jobs/'
+    | '/journal/'
+    | '/marketplace/'
+    | '/journal/policy/$slug'
+    | '/marketplace/category/$slug'
+    | '/marketplace/providers/$slug'
+    | '/ev/$categorySlug/$brandSlug/$vehicleSlug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
+    | '/air-quality'
+    | '/carbon-calculator'
+    | '/chargers'
     | '/dashboard'
+    | '/directory'
+    | '/find-chargers'
+    | '/login'
+    | '/rewards'
     | '/route-planner'
+    | '/sitemap-ev.xml'
+    | '/sitemap-pages.xml'
+    | '/sitemap.xml'
     | '/solar-calculator'
-    | '/locations/$slug'
+    | '/water-calculator'
+    | '/auth/callback'
+    | '/ev/$categorySlug'
+    | '/ev/compare'
+    | '/job-and-internship/$slug'
+    | '/jobs/$slug'
+    | '/journal/$slug'
     | '/stations/$stationId'
-    | '/locations'
+    | '/ev'
+    | '/job-and-internship'
+    | '/jobs'
+    | '/journal'
+    | '/marketplace'
+    | '/journal/policy/$slug'
+    | '/marketplace/category/$slug'
+    | '/marketplace/providers/$slug'
+    | '/ev/$categorySlug/$brandSlug/$vehicleSlug'
   id:
     | '__root__'
     | '/'
+    | '/admin'
+    | '/air-quality'
+    | '/carbon-calculator'
+    | '/chargers'
     | '/dashboard'
+    | '/directory'
+    | '/find-chargers'
+    | '/login'
+    | '/rewards'
     | '/route-planner'
+    | '/sitemap-ev.xml'
+    | '/sitemap-pages.xml'
+    | '/sitemap.xml'
     | '/solar-calculator'
-    | '/locations/$slug'
+    | '/water-calculator'
+    | '/auth/callback'
+    | '/ev/$categorySlug'
+    | '/ev/compare'
+    | '/job-and-internship/$slug'
+    | '/jobs/$slug'
+    | '/journal/$slug'
     | '/stations/$stationId'
-    | '/locations/'
+    | '/ev/'
+    | '/job-and-internship/'
+    | '/jobs/'
+    | '/journal/'
+    | '/marketplace/'
+    | '/journal/policy/$slug'
+    | '/marketplace/category/$slug'
+    | '/marketplace/providers/$slug'
+    | '/ev/$categorySlug_/$brandSlug/$vehicleSlug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
+  AirQualityRoute: typeof AirQualityRoute
+  CarbonCalculatorRoute: typeof CarbonCalculatorRoute
+  ChargersRoute: typeof ChargersRoute
   DashboardRoute: typeof DashboardRoute
+  DirectoryRoute: typeof DirectoryRoute
+  FindChargersRoute: typeof FindChargersRoute
+  LoginRoute: typeof LoginRoute
+  RewardsRoute: typeof RewardsRoute
   RoutePlannerRoute: typeof RoutePlannerRoute
+  SitemapEvDotxmlRoute: typeof SitemapEvDotxmlRoute
+  SitemapPagesDotxmlRoute: typeof SitemapPagesDotxmlRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SolarCalculatorRoute: typeof SolarCalculatorRoute
-  LocationsSlugRoute: typeof LocationsSlugRoute
+  WaterCalculatorRoute: typeof WaterCalculatorRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
+  EvCategorySlugRoute: typeof EvCategorySlugRoute
+  EvCompareRoute: typeof EvCompareRoute
+  JobAndInternshipSlugRoute: typeof JobAndInternshipSlugRoute
+  JobsSlugRoute: typeof JobsSlugRoute
+  JournalSlugRoute: typeof JournalSlugRoute
   StationsStationIdRoute: typeof StationsStationIdRoute
-  LocationsIndexRoute: typeof LocationsIndexRoute
+  EvIndexRoute: typeof EvIndexRoute
+  JobAndInternshipIndexRoute: typeof JobAndInternshipIndexRoute
+  JobsIndexRoute: typeof JobsIndexRoute
+  JournalIndexRoute: typeof JournalIndexRoute
+  MarketplaceIndexRoute: typeof MarketplaceIndexRoute
+  JournalPolicySlugRoute: typeof JournalPolicySlugRoute
+  MarketplaceCategorySlugRoute: typeof MarketplaceCategorySlugRoute
+  MarketplaceProvidersSlugRoute: typeof MarketplaceProvidersSlugRoute
+  EvCategorySlugBrandSlugVehicleSlugRoute: typeof EvCategorySlugBrandSlugVehicleSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -130,11 +457,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/air-quality': {
+      id: '/air-quality'
+      path: '/air-quality'
+      fullPath: '/air-quality'
+      preLoaderRoute: typeof AirQualityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/carbon-calculator': {
+      id: '/carbon-calculator'
+      path: '/carbon-calculator'
+      fullPath: '/carbon-calculator'
+      preLoaderRoute: typeof CarbonCalculatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chargers': {
+      id: '/chargers'
+      path: '/chargers'
+      fullPath: '/chargers'
+      preLoaderRoute: typeof ChargersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/directory': {
+      id: '/directory'
+      path: '/directory'
+      fullPath: '/directory'
+      preLoaderRoute: typeof DirectoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/find-chargers': {
+      id: '/find-chargers'
+      path: '/find-chargers'
+      fullPath: '/find-chargers'
+      preLoaderRoute: typeof FindChargersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rewards': {
+      id: '/rewards'
+      path: '/rewards'
+      fullPath: '/rewards'
+      preLoaderRoute: typeof RewardsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/route-planner': {
@@ -144,6 +527,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RoutePlannerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap-ev.xml': {
+      id: '/sitemap-ev.xml'
+      path: '/sitemap-ev.xml'
+      fullPath: '/sitemap-ev.xml'
+      preLoaderRoute: typeof SitemapEvDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-pages.xml': {
+      id: '/sitemap-pages.xml'
+      path: '/sitemap-pages.xml'
+      fullPath: '/sitemap-pages.xml'
+      preLoaderRoute: typeof SitemapPagesDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/solar-calculator': {
       id: '/solar-calculator'
       path: '/solar-calculator'
@@ -151,18 +555,88 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SolarCalculatorRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/locations/': {
-      id: '/locations/'
-      path: '/locations'
-      fullPath: '/locations/'
-      preLoaderRoute: typeof LocationsIndexRouteImport
+    '/water-calculator': {
+      id: '/water-calculator'
+      path: '/water-calculator'
+      fullPath: '/water-calculator'
+      preLoaderRoute: typeof WaterCalculatorRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/locations/$slug': {
-      id: '/locations/$slug'
-      path: '/locations/$slug'
-      fullPath: '/locations/$slug'
-      preLoaderRoute: typeof LocationsSlugRouteImport
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ev/': {
+      id: '/ev/'
+      path: '/ev'
+      fullPath: '/ev/'
+      preLoaderRoute: typeof EvIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ev/$categorySlug': {
+      id: '/ev/$categorySlug'
+      path: '/ev/$categorySlug'
+      fullPath: '/ev/$categorySlug'
+      preLoaderRoute: typeof EvCategorySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ev/compare': {
+      id: '/ev/compare'
+      path: '/ev/compare'
+      fullPath: '/ev/compare'
+      preLoaderRoute: typeof EvCompareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/job-and-internship/': {
+      id: '/job-and-internship/'
+      path: '/job-and-internship'
+      fullPath: '/job-and-internship/'
+      preLoaderRoute: typeof JobAndInternshipIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/job-and-internship/$slug': {
+      id: '/job-and-internship/$slug'
+      path: '/job-and-internship/$slug'
+      fullPath: '/job-and-internship/$slug'
+      preLoaderRoute: typeof JobAndInternshipSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs/': {
+      id: '/jobs/'
+      path: '/jobs'
+      fullPath: '/jobs/'
+      preLoaderRoute: typeof JobsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs/$slug': {
+      id: '/jobs/$slug'
+      path: '/jobs/$slug'
+      fullPath: '/jobs/$slug'
+      preLoaderRoute: typeof JobsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal/': {
+      id: '/journal/'
+      path: '/journal'
+      fullPath: '/journal/'
+      preLoaderRoute: typeof JournalIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal/$slug': {
+      id: '/journal/$slug'
+      path: '/journal/$slug'
+      fullPath: '/journal/$slug'
+      preLoaderRoute: typeof JournalSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marketplace/': {
+      id: '/marketplace/'
+      path: '/marketplace'
+      fullPath: '/marketplace/'
+      preLoaderRoute: typeof MarketplaceIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/stations/$stationId': {
@@ -172,18 +646,82 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StationsStationIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/journal/policy/$slug': {
+      id: '/journal/policy/$slug'
+      path: '/journal/policy/$slug'
+      fullPath: '/journal/policy/$slug'
+      preLoaderRoute: typeof JournalPolicySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marketplace/category/$slug': {
+      id: '/marketplace/category/$slug'
+      path: '/marketplace/category/$slug'
+      fullPath: '/marketplace/category/$slug'
+      preLoaderRoute: typeof MarketplaceCategorySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marketplace/providers/$slug': {
+      id: '/marketplace/providers/$slug'
+      path: '/marketplace/providers/$slug'
+      fullPath: '/marketplace/providers/$slug'
+      preLoaderRoute: typeof MarketplaceProvidersSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ev/$categorySlug_/$brandSlug/$vehicleSlug': {
+      id: '/ev/$categorySlug_/$brandSlug/$vehicleSlug'
+      path: '/ev/$categorySlug/$brandSlug/$vehicleSlug'
+      fullPath: '/ev/$categorySlug/$brandSlug/$vehicleSlug'
+      preLoaderRoute: typeof EvCategorySlugBrandSlugVehicleSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
+  AirQualityRoute: AirQualityRoute,
+  CarbonCalculatorRoute: CarbonCalculatorRoute,
+  ChargersRoute: ChargersRoute,
   DashboardRoute: DashboardRoute,
+  DirectoryRoute: DirectoryRoute,
+  FindChargersRoute: FindChargersRoute,
+  LoginRoute: LoginRoute,
+  RewardsRoute: RewardsRoute,
   RoutePlannerRoute: RoutePlannerRoute,
+  SitemapEvDotxmlRoute: SitemapEvDotxmlRoute,
+  SitemapPagesDotxmlRoute: SitemapPagesDotxmlRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SolarCalculatorRoute: SolarCalculatorRoute,
-  LocationsSlugRoute: LocationsSlugRoute,
+  WaterCalculatorRoute: WaterCalculatorRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
+  EvCategorySlugRoute: EvCategorySlugRoute,
+  EvCompareRoute: EvCompareRoute,
+  JobAndInternshipSlugRoute: JobAndInternshipSlugRoute,
+  JobsSlugRoute: JobsSlugRoute,
+  JournalSlugRoute: JournalSlugRoute,
   StationsStationIdRoute: StationsStationIdRoute,
-  LocationsIndexRoute: LocationsIndexRoute,
+  EvIndexRoute: EvIndexRoute,
+  JobAndInternshipIndexRoute: JobAndInternshipIndexRoute,
+  JobsIndexRoute: JobsIndexRoute,
+  JournalIndexRoute: JournalIndexRoute,
+  MarketplaceIndexRoute: MarketplaceIndexRoute,
+  JournalPolicySlugRoute: JournalPolicySlugRoute,
+  MarketplaceCategorySlugRoute: MarketplaceCategorySlugRoute,
+  MarketplaceProvidersSlugRoute: MarketplaceProvidersSlugRoute,
+  EvCategorySlugBrandSlugVehicleSlugRoute:
+    EvCategorySlugBrandSlugVehicleSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

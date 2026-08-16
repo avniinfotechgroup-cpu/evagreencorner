@@ -87,17 +87,216 @@ export interface VehicleProfile {
   id: string;
   name: string;
   batteryKwh: number;
+  /** Typical claimed / MIDC-style range used for stop planning (km). */
   rangeKm: number;
   connector: string;
+  /** True for scooters / 2W–3W that use battery-swap networks */
+  batterySwap: boolean;
+  /** Optional display notes for admin / UI */
+  brand?: string;
+  segment?: string;
 }
 
+/**
+ * India-focused route planner profiles.
+ * Battery / range are reference planning values (variant-dependent; re-verify for quotes).
+ */
 export const VEHICLES: VehicleProfile[] = [
-  { id: "nexon-ev", name: "Tata Nexon EV LR", batteryKwh: 40.5, rangeKm: 380, connector: "CCS2" },
-  { id: "mg-zs", name: "MG ZS EV", batteryKwh: 50.3, rangeKm: 420, connector: "CCS2" },
-  { id: "xuv400", name: "Mahindra XUV400", batteryKwh: 39.4, rangeKm: 350, connector: "CCS2" },
-  { id: "tiago-ev", name: "Tata Tiago EV", batteryKwh: 24, rangeKm: 250, connector: "CCS2" },
-  { id: "byd-atto3", name: "BYD Atto 3", batteryKwh: 60.5, rangeKm: 480, connector: "CCS2" },
+  {
+    id: "nexon-ev-45",
+    name: "Tata Nexon EV (45 kWh)",
+    brand: "Tata",
+    segment: "SUV",
+    batteryKwh: 45,
+    rangeKm: 465,
+    connector: "CCS2",
+    batterySwap: false,
+  },
+  {
+    id: "nexon-ev-40",
+    name: "Tata Nexon EV (40 kWh)",
+    brand: "Tata",
+    segment: "SUV",
+    batteryKwh: 40,
+    rangeKm: 375,
+    connector: "CCS2",
+    batterySwap: false,
+  },
+  {
+    id: "punch-ev-35",
+    name: "Tata Punch EV (35 kWh)",
+    brand: "Tata",
+    segment: "Micro SUV",
+    batteryKwh: 35,
+    rangeKm: 421,
+    connector: "CCS2",
+    batterySwap: false,
+  },
+  {
+    id: "tiago-ev-24",
+    name: "Tata Tiago EV (24 kWh)",
+    brand: "Tata",
+    segment: "Hatchback",
+    batteryKwh: 24,
+    rangeKm: 315,
+    connector: "CCS2",
+    batterySwap: false,
+  },
+  {
+    id: "curvv-ev",
+    name: "Tata Curvv EV (55 kWh)",
+    brand: "Tata",
+    segment: "Coupe SUV",
+    batteryKwh: 55,
+    rangeKm: 502,
+    connector: "CCS2",
+    batterySwap: false,
+  },
+  {
+    id: "mg-zs-50",
+    name: "MG ZS EV (50.3 kWh)",
+    brand: "MG",
+    segment: "SUV",
+    batteryKwh: 50.3,
+    rangeKm: 461,
+    connector: "CCS2",
+    batterySwap: false,
+  },
+  {
+    id: "mg-windsor",
+    name: "MG Windsor EV (38 kWh)",
+    brand: "MG",
+    segment: "SUV",
+    batteryKwh: 38,
+    rangeKm: 331,
+    connector: "CCS2",
+    batterySwap: false,
+  },
+  {
+    id: "xuv400",
+    name: "Mahindra XUV400 (39.4 kWh)",
+    brand: "Mahindra",
+    segment: "SUV",
+    batteryKwh: 39.4,
+    rangeKm: 456,
+    connector: "CCS2",
+    batterySwap: false,
+  },
+  {
+    id: "be6e",
+    name: "Mahindra BE 6e (59 kWh)",
+    brand: "Mahindra",
+    segment: "SUV",
+    batteryKwh: 59,
+    rangeKm: 535,
+    connector: "CCS2",
+    batterySwap: false,
+  },
+  {
+    id: "xev9e",
+    name: "Mahindra XEV 9e (59 kWh)",
+    brand: "Mahindra",
+    segment: "SUV",
+    batteryKwh: 59,
+    rangeKm: 542,
+    connector: "CCS2",
+    batterySwap: false,
+  },
+  {
+    id: "byd-atto3",
+    name: "BYD Atto 3 (60.5 kWh)",
+    brand: "BYD",
+    segment: "SUV",
+    batteryKwh: 60.5,
+    rangeKm: 521,
+    connector: "CCS2",
+    batterySwap: false,
+  },
+  {
+    id: "byd-seal",
+    name: "BYD Seal (82.5 kWh)",
+    brand: "BYD",
+    segment: "Sedan",
+    batteryKwh: 82.5,
+    rangeKm: 650,
+    connector: "CCS2",
+    batterySwap: false,
+  },
+  {
+    id: "hyundai-creta-ev",
+    name: "Hyundai Creta Electric (51.4 kWh)",
+    brand: "Hyundai",
+    segment: "SUV",
+    batteryKwh: 51.4,
+    rangeKm: 473,
+    connector: "CCS2",
+    batterySwap: false,
+  },
+  {
+    id: "kia-ev6",
+    name: "Kia EV6 (77.4 kWh)",
+    brand: "Kia",
+    segment: "Crossover",
+    batteryKwh: 77.4,
+    rangeKm: 708,
+    connector: "CCS2",
+    batterySwap: false,
+  },
+  {
+    id: "ola-s1-pro",
+    name: "Ola S1 Pro (4 kWh)",
+    brand: "Ola",
+    segment: "Scooter",
+    batteryKwh: 4,
+    rangeKm: 195,
+    connector: "Type 2 / Portable",
+    batterySwap: false,
+  },
+  {
+    id: "ather-450x",
+    name: "Ather 450X (3.7 kWh)",
+    brand: "Ather",
+    segment: "Scooter",
+    batteryKwh: 3.7,
+    rangeKm: 150,
+    connector: "Type 2 / Portable",
+    batterySwap: false,
+  },
+  {
+    id: "bounce-infinity",
+    name: "Bounce Infinity E1 (swap)",
+    brand: "Bounce",
+    segment: "Scooter",
+    batteryKwh: 1.9,
+    rangeKm: 85,
+    connector: "Battery swap",
+    batterySwap: true,
+  },
+  {
+    id: "sun-mobility-3w",
+    name: "EV 3W / loader (battery swap)",
+    brand: "Swap network",
+    segment: "3-wheeler",
+    batteryKwh: 5,
+    rangeKm: 100,
+    connector: "Battery swap",
+    batterySwap: true,
+  },
 ];
+
+/** Map old saved vehicle ids → current catalog */
+const VEHICLE_ALIASES: Record<string, string> = {
+  "nexon-ev": "nexon-ev-40",
+  "mg-zs": "mg-zs-50",
+  "tiago-ev": "tiago-ev-24",
+  "swap-scooter": "bounce-infinity",
+  "swap-3w": "sun-mobility-3w",
+};
+
+export function resolveRouteVehicle(id: string | undefined | null): VehicleProfile {
+  const key = id ? VEHICLE_ALIASES[id] ?? id : VEHICLES[0]!.id;
+  return VEHICLES.find((v) => v.id === key) ?? VEHICLES[0]!;
+}
 
 export interface PlannedStop extends CorridorStop {
   arrivalSoc: number;
@@ -105,6 +304,8 @@ export interface PlannedStop extends CorridorStop {
   kwhAdded: number;
   cost: number;
   minutes: number;
+  lat?: number;
+  lng?: number;
 }
 
 export interface RoutePlan {
@@ -122,6 +323,53 @@ export interface RoutePlan {
   arrivalSoc: number;
   synthetic: boolean;
 }
+
+/** Charging stations found near the driving path (for map + browse list). */
+export type RouteCorridorStation = {
+  id: string;
+  name: string;
+  city: string;
+  lat: number;
+  lng: number;
+  /** Approximate distance along route (km) */
+  atKm: number;
+  powerKw: number | null;
+  connectors: string[];
+  pricePerKwh: number | null;
+  /** True when this station was chosen as a planned charge stop */
+  planned?: boolean;
+  /** Battery-swap-only (or primarily swap) location */
+  batterySwap?: boolean;
+  serviceType?: "plug_in" | "battery_swap" | "both";
+};
+
+/** Swap-only sites are irrelevant for plug-in cars (Nexon, etc.). */
+export function isBatterySwapOnlyStation(s: {
+  batterySwap?: boolean;
+  serviceType?: string | null;
+  connectors?: string[];
+  name?: string;
+}): boolean {
+  if (s.serviceType === "battery_swap") return true;
+  if (s.serviceType === "both") return false;
+  if (s.serviceType === "plug_in") return false;
+  const connectors = s.connectors ?? [];
+  const hasPlug = connectors.some((c) =>
+    /ccs|type\s*2|chademo|gb\/t|\bac\b|dc\b|bharat/i.test(c),
+  );
+  const hasSwapLabel = connectors.some((c) => /battery\s*swap|swap/i.test(c));
+  if (hasPlug && !hasSwapLabel) return false;
+  if (hasSwapLabel && !hasPlug) return true;
+  if (s.batterySwap && !hasPlug) return true;
+  return /battery\s*swap|\(battery swap\)/i.test(s.name ?? "");
+}
+
+export type RouteMapPayload = {
+  geometry: Array<{ lat: number; lng: number }>;
+  origin: { lat: number; lng: number; label: string };
+  destination: { lat: number; lng: number; label: string };
+  corridorStations?: RouteCorridorStation[];
+};
 
 function findCorridor(from: string, to: string): Corridor | undefined {
   const a = from.trim().toLowerCase();

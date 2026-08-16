@@ -123,6 +123,122 @@
   --gradient-volt: linear-gradient(100deg, var(--volt), oklch(0.82 0.16 145));
   --shadow-soft: 0 1px 2px oklch(0.3 0.05 155 / 0.06), 0 10px 30px -18px oklch(0.3 0.05 155 / 0.35);
   --shadow-lift: 0 2px 4px oklch(0.3 0.05 155 / 0.05), 0 24px 50px -24px oklch(0.3 0.05 155 / 0.4);
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease,
+    border-color 0.35s ease;
+}
+
+/* Module themes — change with menu / route */
+html[data-module="routes"] {
+  --primary: oklch(0.42 0.1 220);
+  --leaf: oklch(0.58 0.12 220);
+  --accent: oklch(0.93 0.03 220);
+  --ring: oklch(0.58 0.12 220);
+  --gradient-canopy: linear-gradient(
+    150deg,
+    oklch(0.3 0.07 230),
+    oklch(0.4 0.1 215) 55%,
+    oklch(0.48 0.09 200)
+  );
+}
+
+html[data-module="aqi"] {
+  --primary: oklch(0.4 0.1 200);
+  --leaf: oklch(0.55 0.11 200);
+  --accent: oklch(0.94 0.03 200);
+  --ring: oklch(0.55 0.11 200);
+  --gradient-canopy: linear-gradient(
+    150deg,
+    oklch(0.3 0.07 210),
+    oklch(0.4 0.1 195) 55%,
+    oklch(0.48 0.09 180)
+  );
+}
+
+html[data-module="solar"] {
+  --primary: oklch(0.5 0.12 85);
+  --leaf: oklch(0.62 0.14 90);
+  --volt: oklch(0.86 0.17 95);
+  --amber: oklch(0.8 0.16 75);
+  --accent: oklch(0.95 0.04 95);
+  --ring: oklch(0.62 0.14 90);
+  --gradient-canopy: linear-gradient(
+    150deg,
+    oklch(0.34 0.07 70),
+    oklch(0.45 0.11 85) 50%,
+    oklch(0.52 0.12 100)
+  );
+}
+
+html[data-module="directory"] {
+  --primary: oklch(0.4 0.08 280);
+  --leaf: oklch(0.55 0.1 270);
+  --accent: oklch(0.94 0.03 280);
+  --ring: oklch(0.55 0.1 270);
+  --gradient-canopy: linear-gradient(
+    150deg,
+    oklch(0.3 0.06 275),
+    oklch(0.38 0.08 265) 55%,
+    oklch(0.46 0.07 250)
+  );
+}
+
+html[data-module="ev"] {
+  --primary: oklch(0.38 0.1 145);
+  --leaf: oklch(0.55 0.14 145);
+  --accent: oklch(0.94 0.04 145);
+  --ring: oklch(0.55 0.14 145);
+  --gradient-canopy: linear-gradient(
+    150deg,
+    oklch(0.28 0.07 150),
+    oklch(0.38 0.11 142) 55%,
+    oklch(0.48 0.1 135)
+  );
+}
+
+html[data-module="marketplace"] {
+  --primary: oklch(0.36 0.09 165);
+  --leaf: oklch(0.54 0.12 165);
+  --accent: oklch(0.94 0.03 165);
+  --ring: oklch(0.54 0.12 165);
+  --gradient-canopy: linear-gradient(
+    150deg,
+    oklch(0.27 0.06 168),
+    oklch(0.37 0.09 162) 55%,
+    oklch(0.46 0.08 155)
+  );
+}
+
+html[data-module="jobs"] {
+  --primary: oklch(0.36 0.09 200);
+  --leaf: oklch(0.55 0.11 200);
+  --accent: oklch(0.94 0.03 200);
+  --ring: oklch(0.55 0.11 200);
+  --gradient-canopy: linear-gradient(
+    150deg,
+    oklch(0.27 0.06 205),
+    oklch(0.37 0.09 198) 55%,
+    oklch(0.46 0.08 190)
+  );
+}
+
+html[data-module="journal"] {
+  --primary: oklch(0.35 0.08 130);
+  --leaf: oklch(0.52 0.12 130);
+  --accent: oklch(0.94 0.03 130);
+  --ring: oklch(0.52 0.12 130);
+  --gradient-canopy: linear-gradient(
+    150deg,
+    oklch(0.26 0.05 135),
+    oklch(0.35 0.08 128) 55%,
+    oklch(0.45 0.07 120)
+  );
+}
+
+html[data-module="chargers"],
+html[data-module="default"] {
+  /* keep :root greens */
 }
 
 .dark {
@@ -210,4 +326,423 @@
     linear-gradient(to bottom, color-mix(in oklab, var(--foreground) 7%, transparent) 1px, transparent 1px);
   background-size: 44px 44px;
 }
+
+/* Leaflet map — keep tiles under UI chrome */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  font: inherit;
+}
+
+.aqi-map-pin {
+  background: transparent !important;
+  border: none !important;
+}
+
+@keyframes hero-nav-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.hero-nav-item {
+  animation: hero-nav-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Hero background motion */
+@keyframes hero-ken {
+  0% {
+    transform: scale(1.05) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.12) translate3d(-1.5%, -1%, 0);
+  }
+  100% {
+    transform: scale(1.05) translate3d(0, 0, 0);
+  }
+}
+
+@keyframes hero-sheen {
+  0% {
+    opacity: 0.15;
+    transform: translateX(-30%) skewX(-12deg);
+  }
+  50% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 0.15;
+    transform: translateX(130%) skewX(-12deg);
+  }
+}
+
+@keyframes hero-orb-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(8%, -12%, 0) scale(1.15);
+    opacity: 0.55;
+  }
+}
+
+.hero-bg-ken {
+  animation: hero-ken 28s ease-in-out infinite;
+  will-change: transform;
+}
+
+.hero-bg-sheen {
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    color-mix(in oklab, var(--volt) 35%, transparent) 50%,
+    transparent 65%
+  );
+  animation: hero-sheen 9s ease-in-out infinite;
+}
+
+.hero-bg-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(40px);
+  animation: hero-orb-float 11s ease-in-out infinite;
+}
+
+.hero-bg-orb-a {
+  left: 8%;
+  top: 18%;
+  width: 180px;
+  height: 180px;
+  background: color-mix(in oklab, var(--volt) 45%, transparent);
+}
+
+.hero-bg-orb-b {
+  right: 10%;
+  top: 28%;
+  width: 220px;
+  height: 220px;
+  background: color-mix(in oklab, var(--leaf) 40%, transparent);
+  animation-delay: -3.5s;
+  animation-duration: 14s;
+}
+
+.hero-bg-orb-c {
+  left: 35%;
+  bottom: 8%;
+  width: 160px;
+  height: 160px;
+  background: color-mix(in oklab, white 18%, transparent);
+  animation-delay: -6s;
+  animation-duration: 16s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-nav-item {
+    animation: none;
+  }
+  .hero-bg-ken,
+  .hero-bg-sheen,
+  .hero-bg-orb {
+    animation: none;
+  }
+}
+
+/* EVA Green Corner — brand mark + loader */
+@keyframes eva-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes eva-corner-draw {
+  0%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  50% {
+    stroke-dashoffset: 12;
+    opacity: 0.55;
+  }
+}
+
+@keyframes eva-leaf-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.95;
+  }
+  50% {
+    transform: scale(0.94);
+    opacity: 0.8;
+  }
+}
+
+@keyframes eva-bolt-flash {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: translateY(0) scale(0.96);
+  }
+  45% {
+    opacity: 1;
+    transform: translateY(1px) scale(1.06);
+  }
+}
+
+.eva-loader-orbit-spin {
+  animation: eva-orbit 0.85s linear infinite;
+}
+
+.eva-page-loader {
+  animation: eva-page-loader-in 0.25s ease-out both;
+}
+
+@keyframes eva-page-loader-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.eva-mark-corner {
+  stroke-dasharray: 28;
+  animation: eva-corner-draw 1.6s ease-in-out infinite;
+}
+
+.eva-mark-corner-delay {
+  animation-delay: -0.8s;
+}
+
+.eva-mark-leaf {
+  transform-origin: 32px 32px;
+  animation: eva-leaf-breathe 1.5s ease-in-out infinite;
+}
+
+.eva-mark-bolt {
+  transform-origin: 36px 42px;
+  animation: eva-bolt-flash 1.05s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eva-loader-orbit-spin,
+  .eva-mark-corner,
+  .eva-mark-leaf,
+  .eva-mark-bolt,
+  .iconic-loader-ring-spin,
+  .iconic-loader-leaf,
+  .iconic-loader-zap {
+    animation: none;
+  }
+}
+
+/* Legacy iconic keyframes kept for any residual classes */
+@keyframes iconic-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes iconic-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.92);
+    opacity: 0.85;
+  }
+}
+
+@keyframes iconic-zap {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+.iconic-loader-ring-spin {
+  animation: iconic-spin 0.9s linear infinite;
+}
+
+.iconic-loader-leaf {
+  animation: iconic-pulse 1.4s ease-in-out infinite;
+}
+
+.iconic-loader-zap {
+  animation: iconic-zap 1.1s ease-in-out infinite;
+}
+
+/* Rich text editor + public article body */
+.ProseMirror {
+  outline: none;
+  min-height: 280px;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--foreground);
+}
+
+.ProseMirror p {
+  margin: 0.65em 0;
+}
+
+.ProseMirror h2 {
+  margin: 1.1em 0 0.45em;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.ProseMirror h3 {
+  margin: 1em 0 0.4em;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  margin: 0.6em 0;
+  padding-left: 1.35rem;
+}
+
+.ProseMirror ul {
+  list-style: disc;
+}
+
+.ProseMirror ol {
+  list-style: decimal;
+}
+
+.ProseMirror blockquote {
+  margin: 0.85em 0;
+  border-left: 3px solid color-mix(in oklch, var(--leaf) 55%, transparent);
+  padding-left: 0.9rem;
+  color: var(--muted-foreground);
+}
+
+.ProseMirror a,
+.rte-content a {
+  color: var(--leaf);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.ProseMirror img,
+.rte-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  border-radius: 0.75rem;
+}
+
+.ProseMirror iframe,
+.rte-content iframe,
+.rte-youtube {
+  display: block;
+  width: 100%;
+  min-height: 280px;
+  margin: 1rem 0;
+  border: 0;
+  border-radius: 0.75rem;
+  aspect-ratio: 16 / 9;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  color: var(--muted-foreground);
+  opacity: 0.7;
+}
+
+.rte-social-embed,
+.rte-content .rte-social-embed {
+  margin: 1rem 0;
+  border: 1px dashed color-mix(in oklch, var(--border) 100%, transparent);
+  border-radius: 0.9rem;
+  background: var(--card);
+  padding: 0.9rem 1rem;
+}
+
+.rte-content {
+  font-size: 0.925rem;
+  line-height: 1.75;
+  color: var(--foreground);
+}
+
+.rte-content h2 {
+  margin: 1.35em 0 0.5em;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.rte-content h3 {
+  margin: 1.15em 0 0.45em;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.rte-content p {
+  margin: 0.75em 0;
+}
+
+.rte-content ul,
+.rte-content ol {
+  margin: 0.75em 0;
+  padding-left: 1.4rem;
+}
+
+.rte-content ul {
+  list-style: disc;
+}
+
+.rte-content ol {
+  list-style: decimal;
+}
+
+.rte-content blockquote {
+  margin: 1em 0;
+  border-left: 3px solid color-mix(in oklch, var(--leaf) 55%, transparent);
+  padding-left: 1rem;
+  color: var(--muted-foreground);
+}
+
+.rte-link-card {
+  display: block;
+  margin: 1.25rem 0;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--card);
+  padding: 1rem 1.1rem;
+  text-decoration: none !important;
+  box-shadow: var(--shadow-soft, 0 1px 2px rgb(0 0 0 / 0.04));
+}
+
+.rte-twitter-embed {
+  margin: 1.25rem 0;
+}
+
+/* AQI atmosphere — static mood colours (no cloud drift) */
 

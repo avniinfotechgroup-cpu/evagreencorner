@@ -1,5 +1,5 @@
-import { Leaf } from "lucide-react";
 import { PLATFORM_MODULES, siteConfig } from "@/config/platform";
+import { SiteLogo } from "./SiteLogo";
 
 const GROUPS: { key: string; label: string }[] = [
   { key: "mobility", label: "Mobility" },
@@ -15,15 +15,12 @@ export function SiteFooter() {
       <div className="mx-auto max-w-7xl px-5 py-14">
         <div className="grid gap-10 md:grid-cols-[1.4fr_repeat(3,1fr)]">
           <div className="max-w-xs">
-            <div className="flex items-center gap-2.5">
-              <span className="grid size-9 place-items-center rounded-xl bg-canopy text-primary-foreground">
-                <Leaf className="size-4.5" strokeWidth={2.2} />
-              </span>
-              <span className="font-display text-lg font-bold">{siteConfig.name}</span>
-            </div>
+            <a href="/" className="inline-flex items-center" aria-label={siteConfig.name}>
+              <SiteLogo variant="full" size="lg" className="h-20 w-auto max-w-[22rem] sm:h-24 sm:max-w-[26rem]" />
+            </a>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              {siteConfig.tagline} A modular environmental platform — charging, air quality,
-              footprints and green services in one place.
+              {siteConfig.tagline} Find nearby EV chargers, compare connectors, and plan routes on{" "}
+              {siteConfig.appUrl.replace(/^https?:\/\//, "")}.
             </p>
             <p className="mt-4 text-sm text-muted-foreground">{siteConfig.supportEmail}</p>
           </div>

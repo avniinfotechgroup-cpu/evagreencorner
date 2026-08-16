@@ -1,5 +1,5 @@
 import { Activity, Gauge, Wind } from "lucide-react";
-import { aqiCategory, type AirQuality } from "@/data/aqi";
+import { aqiCategory, usAqiCategory, type AirQuality } from "@/data/aqi";
 
 interface Props {
   data: AirQuality;
@@ -7,8 +7,9 @@ interface Props {
 }
 
 export function AqiPanel({ data, compact = false }: Props) {
-  const cat = aqiCategory(data.aqi);
-  const max = Math.max(...data.trend.map((t) => t.aqi));
+  const cat = data.scale === "us" ? usAqiCategory(data.aqi) : aqiCategory(data.aqi);
+  const trend = data.trend.length ? data.trend : [{ day: "Now", aqi: data.aqi }];
+  const max = Math.max(...trend.map((t) => t.aqi), 1);
 
   return (
     <div className="rounded-3xl border border-border bg-card p-5 shadow-soft">
@@ -17,6 +18,11 @@ export function AqiPanel({ data, compact = false }: Props) {
           <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
             <Wind className="size-3.5 text-leaf" />
             Air quality · {data.area}
+            {data.source === "live" ? (
+              <span className="rounded-full bg-leaf/15 px-2 py-0.5 text-[10px] font-bold text-leaf">
+                LIVE
+              </span>
+            ) : null}
           </span>
           <div className="mt-3 flex items-end gap-3">
             <p className="font-display text-4xl font-bold leading-none">{data.aqi}</p>
@@ -25,6 +31,11 @@ export function AqiPanel({ data, compact = false }: Props) {
             </span>
           </div>
           <p className="mt-2 max-w-sm text-xs text-muted-foreground">{cat.advice}</p>
+          {data.dominant ? (
+            <p className="mt-1 text-xs font-medium text-foreground">
+              Dominant pollutant: {data.dominant}
+            </p>
+          ) : null}
         </div>
 
         <div className="text-right text-[11px] text-muted-foreground">
@@ -36,16 +47,15 @@ export function AqiPanel({ data, compact = false }: Props) {
         </div>
       </div>
 
-      {/* 7-day trend */}
       <div className="mt-6">
         <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
           7-day trend
         </p>
         <div className="mt-3 flex h-24 items-end gap-2">
-          {data.trend.map((t) => {
-            const tone = aqiCategory(t.aqi);
+          {trend.map((t, idx) => {
+            const tone = data.scale === "us" ? usAqiCategory(t.aqi) : aqiCategory(t.aqi);
             return (
-              <div key={t.day} className="flex flex-1 flex-col items-center gap-1.5">
+              <div key={`${t.day}-${idx}`} className="flex flex-1 flex-col items-center gap-1.5">
                 <span className="text-[10px] font-semibold text-muted-foreground">{t.aqi}</span>
                 <div
                   className={`w-full rounded-t-md ${tone.dot}`}
@@ -58,7 +68,7 @@ export function AqiPanel({ data, compact = false }: Props) {
         </div>
       </div>
 
-      {!compact && (
+      {!compact && data.pollutants.length > 0 ? (
         <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3">
           {data.pollutants.map((p) => (
             <div key={p.code} className="rounded-xl border border-border bg-surface p-3">
@@ -76,11 +86,13 @@ export function AqiPanel({ data, compact = false }: Props) {
             </div>
           ))}
         </div>
-      )}
+      ) : null}
 
       <p className="mt-4 inline-flex items-center gap-1.5 text-[11px] text-muted-foreground">
         <Gauge className="size-3.5" />
-        Indian National AQI scale (CPCB), 0–500.
+        {data.scale === "us"
+          ? "US EPA AQI scale (0–500)."
+          : "Indian National AQI scale (CPCB), 0–500."}
       </p>
     </div>
   );

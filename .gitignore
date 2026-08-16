@@ -15,6 +15,25 @@ dist-ssr
 .tanstack/**
 .nitro
 *.local
+.env
+.env.*
+!.env.example
+!.env.production.example
+
+# Community MVP local data
+data/*
+!data/.gitkeep
+data/community.sqlite
+data/community.sqlite-*
+public/uploads/reviews/*
+!public/uploads/reviews/.gitkeep
+public/uploads/content/*
+!public/uploads/content/.gitkeep
+public/uploads/vehicles/*
+!public/uploads/vehicles/.gitkeep
+ml/.venv/
+ml/model/*.joblib
+ml/__pycache__/
 
 # Wrangler / Cloudflare
 .wrangler/

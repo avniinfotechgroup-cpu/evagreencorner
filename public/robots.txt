@@ -1,4 +1,8 @@
+# EVA Green Corner — crawl rules for Google & other bots
 User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
 Allow: /
 
 User-agent: Bingbot
@@ -12,3 +16,15 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+# Private / app surfaces (do not index)
+Disallow: /admin
+Disallow: /login
+Disallow: /dashboard
+Disallow: /auth/
+Disallow: /rewards
+
+# Primary sitemap index (includes pages + EV vehicles)
+Sitemap: https://evagreencorner.com/sitemap.xml
+Sitemap: https://evagreencorner.com/sitemap-pages.xml
+Sitemap: https://evagreencorner.com/sitemap-ev.xml
